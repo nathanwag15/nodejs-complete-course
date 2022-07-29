@@ -1,37 +1,22 @@
 const http = require("http");
+const bodyParser = require("body-parser");
 
 const express = require("express");
-const bodyParser = require("body-parser");
+const path = require("path");
 
 const app = express();
 
-// app.use((req, res, next) => {
-//   console.log("in the middleware!");
-//   next(); // Allows the request to continue to the next middleware in line
-// });
+const adminRoutes = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/add-product", (req, res, next) => {
-  console.log("in another middleware!");
-  res.send(
-    '<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></input></form>'
-  );
-});
+app.use("/admin", adminRoutes);
+app.use(shopRoutes);
 
-app.post("/product", (req, res, next) => {
-  console.log(req.body);
-  res.redirect("/");
-});
-
-app.use("/add-product", (req, res, next) => {
-  console.log("add product page");
-  res.send("<h1>The add product page</h1>");
-});
-
-app.use("/", (req, res, next) => {
-  console.log("in another middleware!");
-  res.send("<h1>Hello from Express!</h1>");
+app.use((req, res, next) => {
+  res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
 });
 
 app.listen(3000);

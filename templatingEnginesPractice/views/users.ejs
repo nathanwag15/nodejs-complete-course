@@ -1,0 +1,17 @@
+<%-include('includes/head.ejs')%>
+
+<body>
+  <%- include('includes/navigation.ejs') %>
+  <main>
+    <% if (users.length > 0) {%>
+    <div class="grid">
+      <% for (let user of users) { %>
+      <h1 class="product__title"><%=user.username%></h1>
+      <% } %>
+    </div>
+    <% } else { %>
+    <h1>No Products found</h1>
+    <% } %>
+  </main>
+  <%- include('includes/end.ejs') %>
+</body>
